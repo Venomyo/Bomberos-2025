@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bono Contribución Bomberos 2025</title>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    body {font-family: Arial, sans-serif; margin:20px; background:#f0f8ff; color:#333;}
+    h1 {text-align:center; color:#2c3e50; font-size: 2.5em; margin-bottom: 10px;}
+    .subtitle {text-align:center; color:#e74c3c; font-size: 1.4em; margin-top: -10px;}
+    .controls {text-align:center; margin:40px 0; white-space: nowrap; overflow-x: auto; padding:10px 0;}
+    .filter-btn {
+      display:inline-block; padding:14px 20px; margin:0 8px; background:#3498db; color:white;
+      border:none; border-radius:12px; cursor:pointer; font-size:18px; font-weight:bold; min-width:120px;
+    }
+    .filter-btn.active {background:#e74c3c; transform:scale(1.05);}
+    .cantidad {display:block; font-size:14px; margin-top:4px; font-weight:normal; opacity:0.9;}
+    .search {text-align:center; margin:30px;}
+    input {padding:16px; width:90%; max-width:800px; font-size:19px; border:3px solid #3498db; border-radius:16px;}
+    table {width:100%; border-collapse:collapse; background:white; box-shadow:0 6px 25px rgba(0,0,0,0.15); border-radius:14px; overflow:hidden; margin-top:20px;}
+    th {background:#3498db; color:white; padding:16px; position:sticky; top:0; cursor:pointer; user-select:none;}
+    th:hover {background:#2980b9;}
+    th.sort-asc::after {content:" Up Arrow"; margin-left:8px;}
+    th.sort-desc::after {content:" Down Arrow"; margin-left:8px;}
+    td {padding:14px; border-bottom:1px solid #ddd; vertical-align: top;}
+    tbody tr:nth-child(2n) {background-color: #e3f2fd;}
+    tbody tr:nth-child(2n+1) {background-color: #ffffff;}
+    tbody tr:hover {background-color: #bbdefb !important;}
+    .talones-container {display: flex; flex-wrap: nowrap; gap: 10px; overflow-x: auto; padding: 8px 0; min-width: 0;}
+    .talones-container::-webkit-scrollbar {height: 8px;}
+    .talones-container::-webkit-scrollbar-thumb {background: #3498db; border-radius: 4px;}
+    .talon-badge {background:#1565c0; color:white; padding:10px 18px; border-radius:12px; font-weight:bold; font-size:18px; white-space:nowrap; flex-shrink:0; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
+    .footer {text-align:center; margin:50px; font-size:1.3em; color:#555;}
+  </style>
+</head>
+<body>
+  <h1>Bono Contribución Bomberos 2025</h1>
+  <div class="subtitle">Concepción del Uruguay</div>
+  <div class="controls" id="botones-patas">
+    <button class="filter-btn active" data-pata="todas"><span>TODAS</span><span class="cantidad" id="cant-todas"> (0)</span></button>
+    <button class="filter-btn" data-pata="1"><span>PATA 1</span><span class="cantidad" id="cant-1"> (0)</span></button>
+    <button class="filter-btn" data-pata="2"><span>PATA 2</span><span class="cantidad" id="cant-2"> (0)</span></button>
+    <button class="filter-btn" data-pata="3"><span>PATA 3</span><span class="cantidad" id="cant-3"> (0)</span></button>
+    <button class="filter-btn" data-pata="4"><span>PATA 4</span><span class="cantidad" id="cant-4"> (0)</span></button>
+    <button class="filter-btn" data-pata="5"><span>PATA 5</span><span class="cantidad" id="cant-5"> (0)</span></button>
+    <button class="filter-btn" data-pata="6"><span>PATA 6</span><span class="cantidad" id="cant-6"> (0)</span></button>
+  </div>
+ 
+  <div class="search">
+    <input type="text" id="buscar" placeholder="Número (ej: 83 → todos los xx83) | Dirección | Nombre | Zona | Cobrador...">
+  </div>
+ 
+  <table id="tabla">
+    <thead>
+      <tr>
+        <th>Pata</th>
+        <th class="sortable" data-col="talon">Números</th>
+        <th class="sortable" data-col="nombre">Apellido y Nombre</th>
+        <th class="sortable" data-col="direccion">Dirección</th>
+        <th class="sortable" data-col="zona">Zona</th>
+        <th class="sortable" data-col="telefono">Teléfono</th>
+        <th class="sortable" data-col="fecha">Fecha</th>
+        <th class="sortable" data-col="cobrador">Cobrador</th>
+        <th class="sortable" data-col="condicion">Condición</th>
+        <th class="sortable" data-col="vendedor">Vendedor</th>
+        <th class="sortable" data-col="cuotas">Cuotas</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+ 
+  <div class="footer">
+    Total: <strong id="total">0</strong> bonos | Mostrando: <strong id="vistos">0</strong>
+  </div>
+
+  <script>
+    const patas = [
+      {num: 1, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1876560847&single=true&output=csv", talones: 3},
+      {num: 2, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1690951467&single=true&output=csv", talones: 6},
+      {num: 3, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1380861405&single=true&output=csv", talones: 9},
+      {num: 4, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1390334418&single=true&output=csv", talones: 12},
+      {num: 5, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1559471229&single=true&output=csv", talones: 15},
+      {num: 6, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1875702601&single=true&output=csv", talones: 18}
+    ];
+
+    const tbody = document.querySelector("#tabla tbody");
+    const inputBuscar = document.getElementById("buscar");
+    let filas = [];
+    let filtroPata = "todas";
+    let ordenActual = { col: null, asc: true };
+    const cantidades = {todas: 0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
+
+    function actualizarContadores() {
+      cantidades.todas = filas.length;
+      document.getElementById("cant-todas").textContent = ` (${cantidades.todas})`;
+      for (let i = 1; i <= 6; i++) {
+        document.getElementById(`cant-${i}`).textContent = ` (${cantidades[i]})`;
+      }
+      document.getElementById("total").textContent = cantidades.todas;
+    }
+
+    // ORDENAMIENTO
+    document.querySelectorAll("th.sortable").forEach(th => {
+      th.addEventListener("click", () => {
+        const col = th.dataset.col;
+        if (ordenActual.col === col) ordenActual.asc = !ordenActual.asc;
+        else { ordenActual.col = col; ordenActual.asc = true; }
+        ordenarTabla();
+      });
+    });
+
+    function ordenarTabla() {
+      document.querySelectorAll("th.sortable").forEach(t => t.classList.remove("sort-asc", "sort-desc"));
+      if (ordenActual.col) {
+        document.querySelector(`th[data-col="${ordenActual.col}"]`).classList.add(ordenActual.asc ? "sort-asc" : "sort-desc");
+      }
+      filas.sort((a, b) => {
+        let A, B;
+        if (ordenActual.col === "talon") {
+          A = a.dataset.primerTalon || "9999";
+          B = b.dataset.primerTalon || "9999";
+        } else {
+          const map = {nombre:2,direccion:3,zona:4,telefono:5,fecha:6,cobrador:7,condicion:8,vendedor:9,cuotas:10};
+          A = a.children[map[ordenActual.col]].textContent.trim().toLowerCase();
+          B = b.children[map[ordenActual.col]].textContent.trim().toLowerCase();
+        }
+        if (!isNaN(A) && !isNaN(B) && A !== "" && B !== "") {
+          return ordenActual.asc ? (Number(A)-Number(B)) : (Number(B)-Number(A));
+        }
+        return ordenActual.asc ? A.localeCompare(B) : B.localeCompare(A);
+      });
+      filas.forEach(tr => tbody.appendChild(tr));
+      aplicarFiltros();
+    }
+
+    // CARGA DE DATOS
+    patas.forEach(pata => {
+      Papa.parse(pata.url, {
+        download: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          results.data.forEach(fila => {
+            if (!fila[0] || fila[0] === "Talones" || !/^\d{4}$/.test(fila[0].trim())) return;
+            const talonesArray = fila.slice(0, pata.talones).map(t => t.trim()).filter(t => /^\d{4}$/.test(t));
+            if (talonesArray.length === 0) return;
+
+            const primerTalon = talonesArray[0];
+            const talonesHtml = talonesArray.map(t => `<span class="talon-badge">${t}</span>`).join("");
+            let col = pata.talones;
+            while (col < fila.length && (!fila[col] || fila[col].trim() === "")) col++;
+            const nombre = (fila[col] || "").trim() || "-";
+            const direccion = (fila[col+1] || "").trim() || "-";
+            const zona = (fila[col+2] || "").trim() || "-";
+            const telefono = (fila[col+3] || "").trim() || "-";
+            const fecha = (fila[col+4] || "").trim() || "-";
+            const cobrador = (fila[col+5] || "").trim() || "-";
+            const condicion = (fila[col+6] || "").trim() || "-";
+            const vendedor = (fila[col+7] || "").trim() || "-";
+            const cuotas = (fila[col+8] || "").trim() || "-";
+
+            const tr = document.createElement("tr");
+            tr.dataset.pata = pata.num;
+            tr.dataset.primerTalon = primerTalon;
+            tr.dataset.numeros = JSON.stringify(talonesArray);
+            tr.innerHTML = `
+              <td><strong>Pata ${pata.num}</strong></td>
+              <td><div class="talones-container">${talonesHtml}</div></td>
+              <td>${nombre}</td>
+              <td>${direccion}</td>
+              <td>${zona}</td>
+              <td>${telefono}</td>
+              <td>${fecha}</td>
+              <td>${cobrador}</td>
+              <td>${condicion}</td>
+              <td>${vendedor}</td>
+              <td>${cuotas}</td>
+            `;
+            tbody.appendChild(tr);
+            filas.push(tr);
+            cantidades[pata.num]++;
+          });
+          actualizarContadores();
+          aplicarFiltros();
+        }
+      });
+    });
+
+    // BUSCADOR MEJORADO
+    function aplicarFiltros() {
+      const texto = inputBuscar.value.trim();
+      const textoLower = texto.toLowerCase().replace(/\s+/g, " ");
+      let visibles = 0;
+
+      filas.forEach(tr => {
+        const pataOk = (filtroPata === "todas" || tr.dataset.pata === filtroPata);
+        if (!pataOk) {
+          tr.style.display = "none";
+          return;
+        }
+
+        if (!texto) {
+          tr.style.display = "";
+          visibles++;
+          return;
+        }
+
+        // BÚSQUEDA POR NÚMERO (1 a 4 dígitos)
+        if (/^\d{1,4}$/.test(texto)) {
+          const busqueda = texto;
+          const numerosFila = JSON.parse(tr.dataset.numeros);
+          let encontrado = false;
+
+          if (busqueda.length >= 3) {
+            // Con 3 o 4 dígitos: busca los últimos 3 (o 4) dígitos
+            const padded = busqueda.padStart(4, "0");
+            encontrado = numerosFila.some(talon => 
+              talon.slice(-3) === padded.slice(-3) || 
+              talon === padded
+            );
+          } else {
+            // Con 1 o 2 dígitos: busca los últimos 2
+            const terminacion = busqueda.padStart(2, "0").slice(-2);
+            encontrado = numerosFila.some(talon => talon.endsWith(terminacion));
+          }
+
+          tr.style.display = encontrado ? "" : "none";
+          if (encontrado) visibles++;
+        } 
+        // BÚSQUEDA POR TEXTO (nombre, dirección, etc.)
+        else {
+          const contenido = tr.textContent.toLowerCase().replace(/\s+/g, " ");
+          const coincide = contenido.includes(textoLower);
+          tr.style.display = coincide ? "" : "none";
+          if (coincide) visibles++;
+        }
+      });
+
+      document.getElementById("vistos").textContent = visibles;
+    }
+
+    inputBuscar.addEventListener("input", aplicarFiltros);
+
+    // BOTONES DE PATA
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        filtroPata = btn.dataset.pata;
+        inputBuscar.value = "";
+        aplicarFiltros();
+      });
+    });
+  </script>
+</body>
+</html>
