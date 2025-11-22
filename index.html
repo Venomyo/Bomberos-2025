@@ -46,15 +46,18 @@
     td:first-child {border-left:none;}
     th:first-child, td:first-child {text-align:left; font-weight:bold;}
 
+    /* Bordes redondeados solo en las esquinas */
     th:first-child {border-top-left-radius:14px;}
     th:last-child {border-top-right-radius:14px;}
     tbody tr:last-child td:first-child {border-bottom-left-radius:14px;}
     tbody tr:last-child td:last-child {border-bottom-right-radius:14px;}
 
+    /* Colores alternados + hover */
     tbody tr:nth-child(odd) {background-color:#f8fdff;}
     tbody tr:nth-child(even) {background-color:#e3f2fd;}
     tbody tr:hover {background-color:#bbdefb !important;}
 
+    /* Números colapsables */
     .talon-principal {
       background:#1565c0; color:white; padding:10px 18px; border-radius:12px; 
       font-weight:bold; font-size:18px; cursor:pointer; display:inline-block;
@@ -88,7 +91,7 @@
   </div>
  
   <div class="search">
-    <input type="text" id="buscar" placeholder="Buscar: número (83 → todos xx83 | 0583 → solo ese), apellido, dirección...">
+    <input type="text" id="buscar" placeholder="Buscar: número (ej: 83), apellido, dirección, zona, cobrador...">
   </div>
  
   <table id="tabla">
@@ -207,7 +210,6 @@
       });
     });
 
-    // BUSCADOR MEJORADO: 4 cifras = búsqueda EXACTA
     function aplicarFiltros() {
       const texto = inputBuscar.value.trim();
       const textoLower = texto.toLowerCase().replace(/\s+/g, " ");
@@ -221,25 +223,17 @@
         let coincide = false;
         const numerosFila = JSON.parse(tr.dataset.numeros);
 
-        if (!texto) {
-          coincide = true;
-        } 
+        if (!texto) coincide = true;
         else if (/^\d{1,4}$/.test(texto)) {
-          const busqueda = texto.padStart(4, "0"); // siempre 4 dígitos internos
-
-          if (texto.length === 4) {
-            // BÚSQUEDA EXACTA cuando son 4 cifras
-            coincide = numerosFila.includes(busqueda);
-          } else if (texto.length === 3) {
-            // últimos 3 dígitos
-            coincide = numerosFila.some(t => t.endsWith(busqueda.slice(-3)));
+          const busqueda = texto;
+          if (busqueda.length >= 3) {
+            const padded = busqueda.padStart(4, "0");
+            coincide = numerosFila.some(t => t.slice(-3) === padded.slice(-3) || t === padded);
           } else {
-            // 1 o 2 dígitos → últimos 2
-            const terminacion = busqueda.slice(-2);
+            const terminacion = busqueda.padStart(2, "0").slice(-2);
             coincide = numerosFila.some(t => t.endsWith(terminacion));
           }
-        } 
-        else {
+        } else {
           coincide = tr.textContent.toLowerCase().replace(/\s+/g, " ").includes(textoLower);
         }
 
@@ -249,7 +243,6 @@
           visibles++;
           indiceVisible++;
 
-          // Al buscar → expandir números
           if (texto) {
             tr.querySelector('.talones-extra').classList.add('mostrar');
           } else {
