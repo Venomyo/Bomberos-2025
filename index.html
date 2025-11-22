@@ -9,46 +9,60 @@
     body {font-family: Arial, sans-serif; margin:20px; background:#f0f8ff; color:#333;}
     h1 {text-align:center; color:#2c3e50; font-size: 2.5em; margin-bottom: 10px;}
     .subtitle {text-align:center; color:#e74c3c; font-size: 1.4em; margin-top: -10px;}
-    .controls {text-align:center; margin:40px 0; white-space: nowrap; overflow-x: auto; padding:10px 0;}
-    .filter-btn {
-      display:inline-block; padding:14px 20px; margin:0 8px; background:#3498db; color:white;
-      border:none; border-radius:12px; cursor:pointer; font-size:18px; font-weight:bold; min-width:120px;
+    
+    /* Botones pata más chicos y bonitos */
+    .controls {
+      text-align:center; margin:30px 0; display:flex; justify-content:center; gap:8px;
+      flex-wrap: wrap; padding:10px;
     }
-    .filter-btn.active {background:#e74c3c; transform:scale(1.05);}
-    .cantidad {display:block; font-size:14px; margin-top:4px; font-weight:normal; opacity:0.9;}
+    .filter-btn {
+      padding:10px 16px; background:#3498db; color:white;
+      border:none; border-radius:10px; cursor:pointer; font-size:15px; 
+      font-weight:bold; white-space:nowrap;
+    }
+    .filter-btn.active {background:#e74c3c; transform:scale(1.08);}
+    .cantidad {font-size:12px; opacity:0.9;}
+
     .search {text-align:center; margin:30px;}
-    input {padding:16px; width:90%; max-width:800px; font-size:19px; border:3px solid #3498db; border-radius:16px;}
-    table {width:100%; border-collapse:collapse; background:white; box-shadow:0 6px 25px rgba(0,0,0,0.15); border-radius:14px; overflow:hidden; margin-top:20px;}
-    th {background:#3498db; color:white; padding:16px; position:sticky; top:0; cursor:pointer; user-select:none;}
+    input {
+      padding:16px; width:90%; max-width:800px; font-size:19px; 
+      border:3px solid #3498db; border-radius:16px;
+      background:#fff;
+    }
+    table {width:100%; border-collapse:collapse; background:white; 
+           box-shadow:0 6px 25px rgba(0,0,0,0.15); border-radius:14px; overflow:hidden; margin-top:20px;}
+    th {background:#3498db; color:white; padding:16px; position:sticky; top:0; cursor:pointer;}
     th:hover {background:#2980b9;}
     th.sort-asc::after {content:" Up Arrow"; margin-left:8px;}
     th.sort-desc::after {content:" Down Arrow"; margin-left:8px;}
     td {padding:14px; border-bottom:1px solid #ddd; vertical-align: top;}
-    tbody tr:nth-child(2n) {background-color: #e3f2fd;}
-    tbody tr:nth-child(2n+1) {background-color: #ffffff;}
+    
+    /* MANTIENE EL COLOR DE FILAS AL FILTRAR */
+    tbody tr {background-color: #ffffff;}
+    tbody tr:nth-child(odd) {background-color: #e3f2fd;}
     tbody tr:hover {background-color: #bbdefb !important;}
-    .talones-container {display: flex; flex-wrap: nowrap; gap: 10px; overflow-x: auto; padding: 8px 0; min-width: 0;}
-    .talones-container::-webkit-scrollbar {height: 8px;}
-    .talones-container::-webkit-scrollbar-thumb {background: #3498db; border-radius: 4px;}
-    .talon-badge {background:#1565c0; color:white; padding:10px 18px; border-radius:12px; font-weight:bold; font-size:18px; white-space:nowrap; flex-shrink:0; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
+
+    .talones-container {display: flex; flex-wrap: nowrap; gap: 10px; overflow-x: auto; padding: 8px 0;}
+    .talon-badge {background:#1565c0; color:white; padding:8px 16px; border-radius:10px; font-weight:bold; font-size:17px; white-space:nowrap;}
     .footer {text-align:center; margin:50px; font-size:1.3em; color:#555;}
   </style>
 </head>
 <body>
   <h1>Bono Contribución Bomberos 2025</h1>
   <div class="subtitle">Concepción del Uruguay</div>
-  <div class="controls" id="botones-patas">
-    <button class="filter-btn active" data-pata="todas"><span>TODAS</span><span class="cantidad" id="cant-todas"> (0)</span></button>
-    <button class="filter-btn" data-pata="1"><span>PATA 1</span><span class="cantidad" id="cant-1"> (0)</span></button>
-    <button class="filter-btn" data-pata="2"><span>PATA 2</span><span class="cantidad" id="cant-2"> (0)</span></button>
-    <button class="filter-btn" data-pata="3"><span>PATA 3</span><span class="cantidad" id="cant-3"> (0)</span></button>
-    <button class="filter-btn" data-pata="4"><span>PATA 4</span><span class="cantidad" id="cant-4"> (0)</span></button>
-    <button class="filter-btn" data-pata="5"><span>PATA 5</span><span class="cantidad" id="cant-5"> (0)</span></button>
-    <button class="filter-btn" data-pata="6"><span>PATA 6</span><span class="cantidad" id="cant-6"> (0)</span></button>
+
+  <div class="controls">
+    <button class="filter-btn active" data-pata="todas">TODAS <span class="cantidad" id="cant-todas">(0)</span></button>
+    <button class="filter-btn" data-pata="1">PATA 1 <span class="cantidad" id="cant-1">(0)</span></button>
+    <button class="filter-btn" data-pata="2">PATA 2 <span class="cantidad" id="cant-2">(0)</span></button>
+    <button class="filter-btn" data-pata="3">PATA 3 <span class="cantidad" id="cant-3">(0)</span></button>
+    <button class="filter-btn" data-pata="4">PATA 4 <span class="cantidad" id="cant-4">(0)</span></button>
+    <button class="filter-btn" data-pata="5">PATA 5 <span class="cantidad" id="cant-5">(0)</span></button>
+    <button class="filter-btn" data-pata="6">PATA 6 <span class="cantidad" id="cant-6">(0)</span></button>
   </div>
  
   <div class="search">
-    <input type="text" id="buscar" placeholder="Número (ej: 83 → todos los xx83) | Dirección | Nombre | Zona | Cobrador...">
+    <input type="text" id="buscar" placeholder="Escriba aquí: número (ej: 83), apellido, nombre, dirección, zona, cobrador...">
   </div>
  
   <table id="tabla">
@@ -88,53 +102,23 @@
     const inputBuscar = document.getElementById("buscar");
     let filas = [];
     let filtroPata = "todas";
-    let ordenActual = { col: null, asc: true };
     const cantidades = {todas: 0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
 
-    function actualizarContadores() {
-      cantidades.todas = filas.length;
-      document.getElementById("cant-todas").textContent = ` (${cantidades.todas})`;
-      for (let i = 1; i <= 6; i++) {
-        document.getElementById(`cant-${i}`).textContent = ` (${cantidades[i]})`;
-      }
-      document.getElementById("total").textContent = cantidades.todas;
-    }
-
-    // ORDENAMIENTO
-    document.querySelectorAll("th.sortable").forEach(th => {
-      th.addEventListener("click", () => {
-        const col = th.dataset.col;
-        if (ordenActual.col === col) ordenActual.asc = !ordenActual.asc;
-        else { ordenActual.col = col; ordenActual.asc = true; }
-        ordenarTabla();
-      });
-    });
-
-    function ordenarTabla() {
-      document.querySelectorAll("th.sortable").forEach(t => t.classList.remove("sort-asc", "sort-desc"));
-      if (ordenActual.col) {
-        document.querySelector(`th[data-col="${ordenActual.col}"]`).classList.add(ordenActual.asc ? "sort-asc" : "sort-desc");
-      }
+    // Orden por pata + número al cargar
+    function ordenarPorPataYNumero() {
       filas.sort((a, b) => {
-        let A, B;
-        if (ordenActual.col === "talon") {
-          A = a.dataset.primerTalon || "9999";
-          B = b.dataset.primerTalon || "9999";
-        } else {
-          const map = {nombre:2,direccion:3,zona:4,telefono:5,fecha:6,cobrador:7,condicion:8,vendedor:9,cuotas:10};
-          A = a.children[map[ordenActual.col]].textContent.trim().toLowerCase();
-          B = b.children[map[ordenActual.col]].textContent.trim().toLowerCase();
-        }
-        if (!isNaN(A) && !isNaN(B) && A !== "" && B !== "") {
-          return ordenActual.asc ? (Number(A)-Number(B)) : (Number(B)-Number(A));
-        }
-        return ordenActual.asc ? A.localeCompare(B) : B.localeCompare(A);
+        const diffPata = parseInt(a.dataset.pata) - parseInt(b.dataset.pata);
+        if (diffPata !== 0) return diffPata;
+        return a.dataset.primerTalon.localeCompare(b.dataset.primerTalon);
       });
-      filas.forEach(tr => tbody.appendChild(tr));
-      aplicarFiltros();
+      filas.forEach((tr, index) => {
+        tbody.appendChild(tr);
+        // Forzamos el color de fondo correcto (impar/par)
+        tr.style.backgroundColor = index % 2 === 0 ? "#e3f2fd" : "#ffffff";
+      });
     }
 
-    // CARGA DE DATOS
+    // Carga de datos
     patas.forEach(pata => {
       Papa.parse(pata.url, {
         download: true,
@@ -179,18 +163,27 @@
             tbody.appendChild(tr);
             filas.push(tr);
             cantidades[pata.num]++;
+            cantidades.todas++;
           });
-          actualizarContadores();
-          aplicarFiltros();
+
+          // Cuando carguen todas → ordenar y mostrar
+          if (filas.length === cantidades.todas) {
+            document.getElementById("total").textContent = cantidades.todas;
+            document.getElementById("cant-todas").textContent = ` (${cantidades.todas})`;
+            for (let i = 1; i <= 6; i++) document.getElementById(`cant-${i}`).textContent = ` (${cantidades[i]})`;
+            ordenarPorPataYNumero();
+            aplicarFiltros();
+          }
         }
       });
     });
 
-    // BUSCADOR MEJORADO
+    // BUSCADOR + MANTIENE COLORES
     function aplicarFiltros() {
       const texto = inputBuscar.value.trim();
       const textoLower = texto.toLowerCase().replace(/\s+/g, " ");
       let visibles = 0;
+      let indiceVisible = 0;
 
       filas.forEach(tr => {
         const pataOk = (filtroPata === "todas" || tr.dataset.pata === filtroPata);
@@ -199,40 +192,32 @@
           return;
         }
 
-        if (!texto) {
-          tr.style.display = "";
-          visibles++;
-          return;
-        }
+        let coincide = false;
 
-        // BÚSQUEDA POR NÚMERO (1 a 4 dígitos)
-        if (/^\d{1,4}$/.test(texto)) {
+        if (!texto) {
+          coincide = true;
+        } else if (/^\d{1,4}$/.test(texto)) {
           const busqueda = texto;
           const numerosFila = JSON.parse(tr.dataset.numeros);
-          let encontrado = false;
-
           if (busqueda.length >= 3) {
-            // Con 3 o 4 dígitos: busca los últimos 3 (o 4) dígitos
             const padded = busqueda.padStart(4, "0");
-            encontrado = numerosFila.some(talon => 
-              talon.slice(-3) === padded.slice(-3) || 
-              talon === padded
-            );
+            coincide = numerosFila.some(t => t.slice(-3) === padded.slice(-3) || t === padded);
           } else {
-            // Con 1 o 2 dígitos: busca los últimos 2
             const terminacion = busqueda.padStart(2, "0").slice(-2);
-            encontrado = numerosFila.some(talon => talon.endsWith(terminacion));
+            coincide = numerosFila.some(t => t.endsWith(terminacion));
           }
+        } else {
+          coincide = tr.textContent.toLowerCase().replace(/\s+/g, " ").includes(textoLower);
+        }
 
-          tr.style.display = encontrado ? "" : "none";
-          if (encontrado) visibles++;
-        } 
-        // BÚSQUEDA POR TEXTO (nombre, dirección, etc.)
-        else {
-          const contenido = tr.textContent.toLowerCase().replace(/\s+/g, " ");
-          const coincide = contenido.includes(textoLower);
-          tr.style.display = coincide ? "" : "none";
-          if (coincide) visibles++;
+        if (coincide) {
+          tr.style.display = "";
+          // MANTIENE EL COLOR CELESTE/BLANCO SEGÚN POSICIÓN VISUAL
+          tr.style.backgroundColor = indiceVisible % 2 === 0 ? "#e3f2fd" : "#ffffff";
+          visibles++;
+          indiceVisible++;
+        } else {
+          tr.style.display = "none";
         }
       });
 
@@ -241,7 +226,7 @@
 
     inputBuscar.addEventListener("input", aplicarFiltros);
 
-    // BOTONES DE PATA
+    // Botones pata
     document.querySelectorAll(".filter-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
