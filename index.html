@@ -6,90 +6,48 @@
   <title>Bono Bomberos 2025</title>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
-    :root {
-      --azul: #3498db;
-      --rojo: #e74c3c;
-      --oscuro: #2c3e50;
-    }
-    * { box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      margin:0; padding:0; background:#f0f8ff; color:#333; line-height:1.5;
-    }
-    h1 {text-align:center; color:var(--oscuro); font-size:2.2em; margin:20px 10px 5px;}
-    .subtitle {text-align:center; color:var(--rojo); font-size:1.4em; margin-bottom:15px;}
-    .controls {
-      display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
-      padding:15px 10px; background:#fff; margin:0 10px 20px; border-radius:12px;
-      box-shadow:0 4px 15px rgba(0,0,0,0.1); overflow-x:auto; white-space:nowrap;
-    }
-    .filter-btn {
-      padding:10px 16px; background:var(--azul); color:white; border:none;
-      border-radius:10px; font-size:15px; font-weight:bold; min-width:90px;
-      flex-shrink:0; cursor:pointer; transition:all 0.2s;
-    }
-    .filter-btn.active {background:var(--rojo); transform:scale(1.1);}
-    .cantidad {font-size:12px; opacity:0.9;}
-    .search {
-      padding:0 15px; margin:20px 0;
-    }
-    input {
-      width:100%; padding:16px; font-size:18px; border:3px solid var(--azul);
-      border-radius:16px; background:white; outline:none;
-    }
-    .table-container {
-      overflow-x:auto; margin:0 10px; border-radius:16px;
-      box-shadow:0 8px 30px rgba(0,0,0,0.2);
-    }
-    table {
-      width:100%; min-width:900px; border-collapse:separate; border-spacing:0;
-      background:white; border-radius:16px; overflow:hidden;
-      border:2px solid var(--azul);
-    }
-    th {
-      background:var(--azul); color:white; padding:14px 8px; text-align:center;
-      font-size:14px; position:sticky; top:0; z-index:10;
-    }
-    td {
-      padding:12px 8px; text-align:center; font-size:15px;
-      border-bottom:1px solid #ddd; border-right:1px solid #eee;
-    }
-    td:first-child {text-align:left; font-weight:bold; font-size:16px;}
-    tbody tr:nth-child(odd) {background:#f8fdff;}
-    tbody tr:nth-child(even) {background:#e3f2fd;}
-    tbody tr:hover {background:#bbdefb !important;}
-    
-    /* Estilos para números */
-    .talon-principal, .talon-extra {
-      background:#1565c0; color:white; padding:10px 18px; border-radius:14px;
-      font-weight:bold; font-size:20px; cursor:pointer; display:inline-block;
-      box-shadow:0 4px 12px rgba(0,0,0,0.3); min-width:100px; text-align:center;
-      transition: all 0.2s;
-    }
-    .talon-principal {font-size:20px; padding:12px 20px;}
-    .talon-extra {font-size:18px; background:#1976d2;}
-    .talon-principal:hover, .talon-principal:active {background:#0d47a1; transform:scale(1.05);}
-    
-    .talones-extra {
-      margin-top:12px; display:none; flex-wrap:wrap; gap:10px; justify-content:center;
-    }
-    .talones-extra.mostrar {display:flex !important;}
-    
-    .footer {
-      text-align:center; padding:30px 20px; font-size:1.4em; color:#555; font-weight:bold;
-    }
-    .resaltado { color: red !important; font-weight: bold !important; background: rgba(255,0,0,0.15) !important; }
-    
-    @media (max-width: 480px) {
-      h1 {font-size:1.9em;}
-      .filter-btn {padding:10px 12px; font-size:14px; min-width:80px;}
-      .talon-principal {font-size:18px; padding:10px 16px;}
+    :root{--azul:#3498db;--rojo:#e74c3c;--oscuro:#2c3e50}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f8ff;color:#333;line-height:1.5;padding-bottom:80px}
+    h1{text-align:center;color:var(--oscuro);font-size:2.4em;margin:20px 10px 8px;font-weight:900}
+    .subtitle{text-align:center;color:var(--rojo);font-size:1.5em;margin-bottom:10px;font-weight:bold}
+    .resultados{text-align:center;padding:14px;background:white;margin:0 15px 12px;border-radius:12px;font-size:1.4em;font-weight:bold;color:var(--oscuro);box-shadow:0 4px 15px rgba(0,0,0,0.1);border:2px solid var(--azul)}
+    .resultados span{color:var(--rojo)}
+    .controls{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:15px;background:#fff;margin:15px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,0.15)}
+    .filter-btn{padding:14px 20px;background:var(--azul);color:white;border:none;border-radius:14px;font-size:16px;font-weight:bold;min-width:100px;flex:1 1 120px;max-width:180px;cursor:pointer;transition:all .3s;box-shadow:0 4px 10px rgba(0,0,0,0.2)}
+    .filter-btn.active{background:var(--rojo);transform:scale(1.08);box-shadow:0 8px 20px rgba(231,76,60,0.4)}
+    .cantidad{font-size:13px;opacity:0.9}
+    .search{padding:0 15px;margin:20px 0}
+    input{width:100%;padding:18px 20px;font-size:20px;border:4px solid var(--azul);border-radius:18px;background:white;outline:none;box-shadow:0 6px 20px rgba(0,0,0,0.15)}
+    .table-container{overflow-x:auto;margin:0 15px 20px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.25);border:3px solid var(--azul)}
+    table{width:100%;min-width:1000px;border-collapse:separate;border-spacing:0;background:white;border-radius:16px;overflow:hidden}
+    th{background:var(--azul);color:white;padding:16px 10px;text-align:center;font-size:15px;position:sticky;top:0;z-index:10;font-weight:bold}
+    td{padding:14px 10px;text-align:center;font-size:16px;border-bottom:1px solid #ddd}
+    td:first-child{text-align:left;font-weight:bold;font-size:17px;padding-left:16px}
+    tbody tr:nth-child(odd){background:#f8fdff}
+    tbody tr:nth-child(even){background:#e3f2fd}
+    tbody tr:hover{background:#bbdefb !important}
+    .talon-principal,.talon-extra{background:#1565c0;color:white;padding:12px 20px;border-radius:14px;font-weight:bold;display:inline-block;min-width:110px;box-shadow:0 4px 12px rgba(0,0,0,0.3);text-align:center}
+    .talon-principal{font-size:22px}
+    .talon-extra{font-size:19px;background:#1976d2;padding:10px 16px}
+    .talones-extra{margin-top:12px;display:none;flex-wrap:wrap;gap:10px;justify-content:center;padding:8px;background:rgba(25,118,210,0.1);border-radius:12px}
+    .talones-extra.mostrar{display:flex !important}
+    .footer{text-align:center;padding:20px;font-size:1.4em;color:#555;font-weight:bold;background:white;margin:20px 15px;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,0.1)}
+    .resaltado{color:red !important;font-weight:bold !important;background:rgba(255,0,0,0.2) !important;border-radius:4px;padding:0 4px}
+    @media(max-width:768px){
+      h1{font-size:2em}.subtitle{font-size:1.3em}.resultados{font-size:1.3em}
+      .filter-btn{padding:16px 12px;font-size:15px;min-width:90px}
+      input{font-size:19px;padding:16px}
+      th,td{font-size:15px;padding:12px 6px}
+      .talon-principal{font-size:20px}.talon-extra{font-size:18px}
     }
   </style>
 </head>
 <body>
   <h1>Bono Contribución Bomberos 2025</h1>
   <div class="subtitle">Concepción del Uruguay</div>
+  <div class="resultados" id="resultados">Cargando datos...</div>
+
   <div class="controls">
     <button class="filter-btn active" data-pata="todas">TODAS <span class="cantidad" id="cant-todas">(0)</span></button>
     <button class="filter-btn" data-pata="1">PATA 1 <span class="cantidad" id="cant-1">(0)</span></button>
@@ -99,264 +57,213 @@
     <button class="filter-btn" data-pata="5">PATA 5 <span class="cantidad" id="cant-5">(0)</span></button>
     <button class="filter-btn" data-pata="6">PATA 6 <span class="cantidad" id="cant-6">(0)</span></button>
   </div>
+
   <div class="search">
-    <input type="text" id="buscar" placeholder="Buscar: 83 → todos xx83 | 0583 → solo ese | nombre | dirección...">
+    <input type="text" id="buscar" placeholder="Buscar: 83 → xx83 | 0583 → solo ese | nombre | dirección...">
   </div>
+
   <div class="table-container">
     <table id="tabla">
       <thead>
         <tr>
-          <th>Pata</th>
-          <th>Números</th>
-          <th>Apellido y Nombre</th>
-          <th>Dirección</th>
-          <th>Zona</th>
-          <th>Teléfono</th>
-          <th>Fecha</th>
-          <th>Cobrador</th>
-          <th>Condición</th>
-          <th>Vendedor</th>
-          <th>Cuotas</th>
+          <th>Pata</th><th>Números</th><th>Apellido y Nombre</th><th>Dirección</th><th>Zona</th>
+          <th>Teléfono</th><th>Fecha</th><th>Cobrador</th><th>Condición</th><th>Vendedor</th><th>Cuotas</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
   </div>
-  <div class="footer">
-    Total: <strong id="total">0</strong> bonos | Mostrando: <strong id="vistos">0</strong>
-  </div>
 
-  <script>
-    const patas = [
-      {num: 1, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1876560847&single=true&output=csv", talones: 3},
-      {num: 2, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1690951467&single=true&output=csv", talones: 6},
-      {num: 3, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1380861405&single=true&output=csv", talones: 9},
-      {num: 4, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1390334418&single=true&output=csv", talones: 12},
-      {num: 5, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1559471229&single=true&output=csv", talones: 15},
-      {num: 6, url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1875702601&single=true&output=csv", talones: 18}
-    ];
+  <div class="footer">Total registrados: <strong id="total">0</strong> bonos</div>
 
-    const tbody = document.querySelector("#tabla tbody");
-    const inputBuscar = document.getElementById("buscar");
-    let filas = [];
-    let filtroPata = "todas";
-    const cantidades = {todas: 0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0};
+<script>
+const patas = [
+  {num:1,url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1876560847&single=true&output=csv",talones:3},
+  {num:2,url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1690951467&single=true&output=csv",talones:6},
+  {num:3,url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1380861405&single=true&output=csv",talones:9},
+  {num:4,url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1390334418&single=true&output=csv",talones:12},
+  {num:5,url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1559471229&single=true&output=csv",talones:15},
+  {num:6,url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vQCWq1IBr07-uCsKpr1Npkr4S4rLfPPgLwXLhIBF7drigXY2sG9P-fKYpHojpedIuS5UeVBO2pV4oxj/pub?gid=1875702601&single=true&output=csv",talones:18}
+];
 
-    // Función para resaltar texto (case insensitive)
-    function resaltarTexto(texto, busqueda) {
-      if (!busqueda) return texto;
-      const regex = new RegExp(`(${busqueda.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      return texto.replace(regex, '<span class="resaltado">$1</span>');
-    }
+const tbody = document.querySelector("#tabla tbody");
+const inputBuscar = document.getElementById("buscar");
+const divResultados = document.getElementById("resultados");
+let filas = [];
+let filtroPata = "todas";
+const cantidades = {todas:0,1:0,2:0,3:0,4:0,5:0,6:0};
 
-    function ordenarPorPataYNumero() {
-      filas.sort((a, b) => {
-        const diff = parseInt(a.dataset.pata) - parseInt(b.dataset.pata);
-        return diff !== 0 ? diff : a.dataset.primerTalon.localeCompare(b.dataset.primerTalon);
-      });
-      filas.forEach(tr => tbody.appendChild(tr));
-    }
+function resaltarTexto(texto,busqueda){
+  if(!busqueda) return texto;
+  const regex = new RegExp(`(${busqueda.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi');
+  return texto.replace(regex,'<span class="resaltado">$1</span>');
+}
 
-    patas.forEach(pata => {
-      Papa.parse(pata.url, {
-        download: true,
-        skipEmptyLines: true,
-        complete: function(results) {
-          results.data.forEach(fila => {
-            if (!fila[0] || fila[0] === "Talones" || !/^\d{4}$/.test(fila[0].trim())) return;
+function ordenarPorPataYNumero(){
+  filas.sort((a,b)=> parseInt(a.dataset.pata)-parseInt(b.dataset.pata) || a.dataset.primerTalon.localeCompare(b.dataset.primerTalon));
+  filas.forEach(tr=>tbody.appendChild(tr));
+}
 
-            const talonesArray = fila.slice(0, pata.talones).map(t => t.trim()).filter(t => /^\d{4}$/.test(t));
-            if (talonesArray.length === 0) return;
+patas.forEach(pata=>{
+  Papa.parse(pata.url,{download:true,skipEmptyLines:true,complete:results=>{
+    results.data.forEach(fila=>{
+      if(!fila[0] || fila[0]==="Talones" || !/^\d{4}$/.test(fila[0].trim())) return;
+      const talonesArray = fila.slice(0,pata.talones).map(t=>t.trim()).filter(t=>/^\d{4}$/.test(t));
+      if(talonesArray.length===0) return;
+      const primerTalon = talonesArray[0];
+      let col = pata.talones;
+      while(col<fila.length && (!fila[col]||fila[col].trim()==="")) col++;
+      const nombre = (fila[col]||"").trim()||"-";
+      const direccion = (fila[col+1]||"").trim()||"-";
+      const zona = (fila[col+2]||"").trim()||"-";
+      const telefono = (fila[col+3]||"").trim()||"-";
+      const fecha = (fila[col+4]||"").trim()||"-";
+      const cobrador = (fila[col+5]||"").trim()||"-";
+      const condicion = (fila[col+6]||"").trim()||"-";
+      const vendedor = (fila[col+7]||"").trim()||"-";
+      const cuotas = (fila[col+8]||"").trim()||"-";
 
-            const primerTalon = talonesArray[0];
-            let col = pata.talones;
-            while (col < fila.length && (!fila[col] || fila[col].trim() === "")) col++;
+      const tr = document.createElement("tr");
+      tr.dataset.pata = pata.num;
+      tr.dataset.primerTalon = primerTalon;
+      tr.dataset.numeros = JSON.stringify(talonesArray);
+      tr.dataset.nombre = nombre; tr.dataset.direccion = direccion; tr.dataset.zona = zona;
+      tr.dataset.telefono = telefono; tr.dataset.fecha = fecha; tr.dataset.cobrador = cobrador;
+      tr.dataset.condicion = condicion; tr.dataset.vendedor = vendedor; tr.dataset.cuotas = cuotas;
 
-            const nombre = (fila[col] || "").trim() || "-";
-            const direccion = (fila[col+1] || "").trim() || "-";
-            const zona = (fila[col+2] || "").trim() || "-";
-            const telefono = (fila[col+3] || "").trim() || "-";
-            const fecha = (fila[col+4] || "").trim() || "-";
-            const cobrador = (fila[col+5] || "").trim() || "-";
-            const condicion = (fila[col+6] || "").trim() || "-";
-            const vendedor = (fila[col+7] || "").trim() || "-";
-            const cuotas = (fila[col+8] || "").trim() || "-";
+      const totalExtra = talonesArray.length-1;
+      const textoExtra = totalExtra>0 ? ` +${totalExtra}` : "";
 
-            const tr = document.createElement("tr");
-            tr.dataset.pata = pata.num;
-            tr.dataset.primerTalon = primerTalon;
-            tr.dataset.numeros = JSON.stringify(talonesArray);
+      tr.innerHTML = `
+        <td><strong>Pata ${pata.num}</strong></td>
+        <td>
+          <div>
+            <span class="talon-principal" data-numero="${primerTalon}">${primerTalon}<span style="font-size:14px;opacity:0.9;">${textoExtra}</span></span>
+            <div class="talones-extra">
+              ${talonesArray.slice(1).map(t=>`<span class="talon-extra" data-numero="${t}">${t}</span>`).join("")}
+            </div>
+          </div>
+        </td>
+        <td class="celda-nombre">${nombre}</td>
+        <td class="celda-direccion">${direccion}</td>
+        <td class="celda-zona">${zona}</td>
+        <td class="celda-telefono">${telefono}</td>
+        <td class="celda-fecha">${fecha}</td>
+        <td class="celda-cobrador">${cobrador}</td>
+        <td class="celda-condicion">${condicion}</td>
+        <td class="celda-vendedor">${vendedor}</td>
+        <td class="celda-cuotas">${cuotas}</td>
+      `;
 
-            // Guardamos valores originales
-            tr.dataset.nombre = nombre;
-            tr.dataset.direccion = direccion;
-            tr.dataset.zona = zona;
-            tr.dataset.telefono = telefono;
-            tr.dataset.fecha = fecha;
-            tr.dataset.cobrador = cobrador;
-            tr.dataset.condicion = condicion;
-            tr.dataset.vendedor = vendedor;
-            tr.dataset.cuotas = cuotas;
+      tr.querySelector('.talon-principal').onclick = () => tr.querySelector('.talones-extra').classList.toggle('mostrar');
 
-            const totalExtra = talonesArray.length - 1;
-            const textoExtra = totalExtra > 0 ? ` +${totalExtra}` : "";
-
-            tr.innerHTML = `
-              <td><strong>Pata ${pata.num}</strong></td>
-              <td>
-                <div>
-                  <span class="talon-principal" data-numero="${primerTalon}">
-                    ${primerTalon}<span style="font-size:14px;opacity:0.9;">${textoExtra}</span>
-                  </span>
-                  <div class="talones-extra">
-                    ${talonesArray.slice(1).map(t => `<span class="talon-extra" data-numero="${t}">${t}</span>`).join("")}
-                  </div>
-                </div>
-              </td>
-              <td class="celda-nombre">${nombre}</td>
-              <td class="celda-direccion">${direccion}</td>
-              <td class="celda-zona">${zona}</td>
-              <td class="celda-telefono">${telefono}</td>
-              <td class="celda-fecha">${fecha}</td>
-              <td class="celda-cobrador">${cobrador}</td>
-              <td class="celda-condicion">${condicion}</td>
-              <td class="celda-vendedor">${vendedor}</td>
-              <td class="celda-cuotas">${cuotas}</td>
-            `;
-
-            // Evento clic para mostrar/ocultar extras
-            tr.querySelector('.talon-principal').addEventListener('click', function() {
-              this.parentNode.querySelector('.talones-extra').classList.toggle('mostrar');
-            });
-
-            tbody.appendChild(tr);
-            filas.push(tr);
-            cantidades[pata.num]++;
-            cantidades.todas++;
-          });
-
-          if (filas.length === cantidades.todas) {
-            document.getElementById("total").textContent = cantidades.todas;
-            document.getElementById("cant-todas").textContent = ` (${cantidades.todas})`;
-            for (let i = 1; i <= 6; i++) document.getElementById(`cant-${i}`).textContent = ` (${cantidades[i]})`;
-            ordenarPorPataYNumero();
-            aplicarFiltros();
-          }
-        }
-      });
+      tbody.appendChild(tr);
+      filas.push(tr);
+      cantidades[pata.num]++; cantidades.todas++;
     });
 
-    function aplicarFiltros() {
-      const texto = inputBuscar.value.trim();
-      const textoLower = texto.toLowerCase().replace(/\s+/g, " ");
-      const esBusquedaNumerica = /^\d{1,4}$/.test(texto);
-      let busquedaNumerica = "";
-      if (esBusquedaNumerica) {
-        busquedaNumerica = texto.padStart(4, "0");
+    if(filas.length===cantidades.todas){
+      document.getElementById("total").textContent = cantidades.todas;
+      document.getElementById("cant-todas").textContent = ` (${cantidades.todas})`;
+      for(let i=1;i<=6;i++) document.getElementById(`cant-${i}`).textContent = ` (${cantidades[i]})`;
+      ordenarPorPataYNumero();
+      aplicarFiltros();
+    }
+  }});
+});
+
+function aplicarFiltros(){
+  const texto = inputBuscar.value.trim();
+  const esNum = /^\d{1,4}$/.test(texto);
+  const busqNum = esNum ? texto.padStart(4,"0") : "";
+  let visibles = 0;
+
+  filas.forEach(tr=>{
+    const pataOk = filtroPata==="todas" || tr.dataset.pata===filtroPata;
+    if(!pataOk){tr.style.display="none";return;}
+    const nums = JSON.parse(tr.dataset.numeros);
+    let coincide = false;
+
+    if(!texto) coincide = true;
+    else if(esNum){
+      if(texto.length===4) coincide = nums.includes(busqNum);
+      else coincide = nums.some(n=>n.endsWith(busqNum.slice(-Math.min(3,texto.length))));
+    }else{
+      coincide = tr.textContent.toLowerCase().includes(texto.toLowerCase());
+    }
+
+    if(coincide){
+      tr.style.display="";
+      visibles++;
+
+      // Resaltado números
+      if(esNum && texto){
+        tr.querySelectorAll('.talon-principal, .talon-extra').forEach(span=>{
+          const n = span.dataset.numero;
+          let html = n;
+          if(texto.length===4 && n===busqNum) html = `<span class="resaltado">${n}</span>`;
+          else if(n.endsWith(busqNum.slice(-Math.min(3,texto.length)))){
+            const fin = n.slice(-Math.min(3,texto.length));
+            const ini = n.slice(0,-fin.length);
+            html = ini + `<span class="resaltado">${fin}</span>`;
+          }
+          span.innerHTML = html + (span.classList.contains('talon-principal')?`<span style="font-size:14px;opacity:0.9;"> +${nums.length-1}</span>`:"");
+        });
+      }else{
+        const principal = tr.querySelector('.talon-principal');
+        principal.innerHTML = tr.dataset.primerTalon + (nums.length>1?`<span style="font-size:14px;opacity:0.9;"> +${nums.length-1}</span>`:"");
+        tr.querySelectorAll('.talon-extra').forEach((s,i)=>s.textContent=nums[i+1]);
       }
 
-      let visibles = 0;
-      let indiceVisible = 0;
+      // Resaltado texto
+      if(texto && !esNum){
+        tr.querySelector('.celda-nombre').innerHTML = resaltarTexto(tr.dataset.nombre,texto);
+        tr.querySelector('.celda-direccion').innerHTML = resaltarTexto(tr.dataset.direccion,texto);
+        tr.querySelector('.celda-zona').innerHTML = resaltarTexto(tr.dataset.zona,texto);
+        tr.querySelector('.celda-telefono').innerHTML = resaltarTexto(tr.dataset.telefono,texto);
+        tr.querySelector('.celda-fecha').innerHTML = resaltarTexto(tr.dataset.fecha,texto);
+        tr.querySelector('.celda-cobrador').innerHTML = resaltarTexto(tr.dataset.cobrador,texto);
+        tr.querySelector('.celda-condicion').innerHTML = resaltarTexto(tr.dataset.condicion,texto);
+        tr.querySelector('.celda-vendedor').innerHTML = resaltarTexto(tr.dataset.vendedor,texto);
+        tr.querySelector('.celda-cuotas').innerHTML = resaltarTexto(tr.dataset.cuotas,texto);
+      }else{
+        tr.querySelector('.celda-nombre').textContent = tr.dataset.nombre;
+        tr.querySelector('.celda-direccion').textContent = tr.dataset.direccion;
+        tr.querySelector('.celda-zona').textContent = tr.dataset.zona;
+        tr.querySelector('.celda-telefono').textContent = tr.dataset.telefono;
+        tr.querySelector('.celda-fecha').textContent = tr.dataset.fecha;
+        tr.querySelector('.celda-cobrador').textContent = tr.dataset.cobrador;
+        tr.querySelector('.celda-condicion').textContent = tr.dataset.condicion;
+        tr.querySelector('.celda-vendedor').textContent = tr.dataset.vendedor;
+        tr.querySelector('.celda-cuotas').textContent = tr.dataset.cuotas;
+      }
 
-      filas.forEach(tr => {
-        const pataOk = (filtroPata === "todas" || tr.dataset.pata === filtroPata);
-        if (!pataOk) { tr.style.display = "none"; return; }
-
-        const numerosFila = JSON.parse(tr.dataset.numeros);
-        let coincide = false;
-
-        if (!texto) {
-          coincide = true;
-        } else if (esBusquedaNumerica) {
-          if (texto.length === 4) {
-            coincide = numerosFila.includes(busquedaNumerica);
-          } else {
-            const ultimos = texto.length <= 2 ? texto.length : 3;
-            const suffix = busquedaNumerica.slice(-ultimos);
-            coincide = numerosFila.some(t => t.endsWith(suffix));
-          }
-        } else {
-          coincide = tr.textContent.toLowerCase().replace(/\s+/g, " ").includes(textoLower);
-        }
-
-        if (coincide) {
-          tr.style.display = "";
-          tr.style.backgroundColor = indiceVisible % 2 === 0 ? "#e3f2fd" : "#f8fdff";
-
-          // Resaltar números si hay búsqueda numérica
-          if (esBusquedaNumerica && texto) {
-            const todosLosSpans = tr.querySelectorAll('.talon-principal, .talon-extra');
-            todosLosSpans.forEach(span => {
-              const num = span.dataset.numero;
-              let mostrar = num;
-              if (texto.length === 4) {
-                if (num === busquedaNumerica) mostrar = `<span class="resaltado">${num}</span>`;
-              } else {
-                const ultimos = texto.length <= 2 ? texto.length : 3;
-                if (num.endsWith(busquedaNumerica.slice(-ultimos))) {
-                  const parteResaltada = num.slice(-ultimos);
-                  const parteNormal = num.slice(0, -ultimos);
-                  mostrar = `${parteNormal}<span class="resaltado">${parteResaltada}</span>`;
-                }
-              }
-              span.innerHTML = mostrar + (span.classList.contains('talon-principal') ? `<span style="font-size:14px;opacity:0.9;"> +${numerosFila.length-1}</span>` : "");
-            });
-          } else {
-            // Restaurar números originales
-            tr.querySelector('.talon-principal').innerHTML = tr.dataset.primerTalon + 
-              (numerosFila.length > 1 ? `<span style="font-size:14px;opacity:0.9;"> +${numerosFila.length-1}</span>` : "");
-            tr.querySelectorAll('.talon-extra').forEach((s, i) => {
-              s.textContent = numerosFila[i+1];
-            });
-          }
-
-          // Resaltar texto en las demás celdas
-          if (texto && !esBusquedaNumerica) {
-            tr.querySelector('.celda-nombre').innerHTML = resaltarTexto(tr.dataset.nombre, texto);
-            tr.querySelector('.celda-direccion').innerHTML = resaltarTexto(tr.dataset.direccion, texto);
-            tr.querySelector('.celda-zona').innerHTML = resaltarTexto(tr.dataset.zona, texto);
-            tr.querySelector('.celda-telefono').innerHTML = resaltarTexto(tr.dataset.telefono, texto);
-            tr.querySelector('.celda-fecha').innerHTML = resaltarTexto(tr.dataset.fecha, texto);
-            tr.querySelector('.celda-cobrador').innerHTML = resaltarTexto(tr.dataset.cobrador, texto);
-            tr.querySelector('.celda-condicion').innerHTML = resaltarTexto(tr.dataset.condicion, texto);
-            tr.querySelector('.celda-vendedor').innerHTML = resaltarTexto(tr.dataset.vendedor, texto);
-            tr.querySelector('.celda-cuotas').innerHTML = resaltarTexto(tr.dataset.cuotas, texto);
-          } else if (!texto || esBusquedaNumerica) {
-            tr.querySelector('.celda-nombre').textContent = tr.dataset.nombre;
-            tr.querySelector('.celda-direccion').textContent = tr.dataset.direccion;
-            tr.querySelector('.celda-zona').textContent = tr.dataset.zona;
-            tr.querySelector('.celda-telefono').textContent = tr.dataset.telefono;
-            tr.querySelector('.celda-fecha').textContent = tr.dataset.fecha;
-            tr.querySelector('.celda-cobrador').textContent = tr.dataset.cobrador;
-            tr.querySelector('.celda-condicion').textContent = tr.dataset.condicion;
-            tr.querySelector('.celda-vendedor').textContent = tr.dataset.vendedor;
-            tr.querySelector('.celda-cuotas').textContent = tr.dataset.cuotas;
-          }
-
-          if (texto) tr.querySelector('.talones-extra').classList.add('mostrar');
-          else tr.querySelector('.talones-extra').classList.remove('mostrar');
-
-          visibles++;
-          indiceVisible++;
-        } else {
-          tr.style.display = "none";
-        }
-      });
-
-      document.getElementById("vistos").textContent = visibles;
+      if(texto) tr.querySelector('.talones-extra').classList.add('mostrar');
+      else tr.querySelector('.talones-extra').classList.remove('mostrar');
+    }else{
+      tr.style.display="none";
     }
+  });
 
-    inputBuscar.addEventListener("input", aplicarFiltros);
+  // CONTADOR DE RESULTADOS
+  if(!texto){
+    divResultados.innerHTML = `Mostrando <span>todos los ${visibles}</span> bonos registrados`;
+  }else{
+    divResultados.innerHTML = `Se encontraron <span>${visibles}</span> resultado${visibles!==1?'s':''} para "<span>${texto}</span>"`;
+  }
+}
 
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        filtroPata = btn.dataset.pata;
-        inputBuscar.value = "";
-        aplicarFiltros();
-      });
-    });
-  </script>
+inputBuscar.addEventListener("input", aplicarFiltros);
+
+document.querySelectorAll(".filter-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    filtroPata = btn.dataset.pata;
+    inputBuscar.value="";
+    aplicarFiltros();
+  });
+});
+</script>
 </body>
 </html>
